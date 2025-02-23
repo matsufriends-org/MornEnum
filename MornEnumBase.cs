@@ -16,6 +16,6 @@ namespace MornEnum
             get => Array.IndexOf(Values, _key);
             set => _key = Values[value];
         }
-        public abstract string[] Values { get; }
+        protected abstract string[] Values { get; }
     }
 }
