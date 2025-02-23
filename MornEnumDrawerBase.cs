@@ -1,34 +1,42 @@
 #if UNITY_EDITOR
+using System;
 using UnityEditor;
 using UnityEngine;
 
 namespace MornEnum
 {
-    public abstract class MornEnumDrawerBase<T> : PropertyDrawer where T : MornEnumGlobalBase<T>
+    public abstract class MornEnumDrawerBase : PropertyDrawer
     {
-        protected abstract T Global { get; }
+        protected abstract string[] Values { get; }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (Global == null)
+            var keyProperty = property.FindPropertyRelative("_key");
+            if (keyProperty == null || keyProperty.propertyType != SerializedPropertyType.String)
             {
-                EditorGUI.LabelField(position, label.text, "Global is null");
+                EditorGUI.PropertyField(position, property, label, true);
                 return;
             }
-            
+
             EditorGUI.BeginProperty(position, label, property);
             {
-                var keyProperty = property.FindPropertyRelative("_key");
-                var flags = Global.Flags;
-                var selectedIndex = flags.IndexOf(keyProperty.stringValue);
-                // 選択されていない場合は0にする 
-                if (selectedIndex == -1)
+                var key = keyProperty.stringValue;
+                var selectedIndex = Array.IndexOf(Values, key);
+                if (selectedIndex < 0)
                 {
                     selectedIndex = 0;
                 }
 
-                selectedIndex = EditorGUI.Popup(position, label.text, selectedIndex, flags.ToArray());
-                keyProperty.stringValue = flags[selectedIndex];
+                if (Values.Length > 0)
+                {
+                    selectedIndex = EditorGUI.Popup(position, label.text, selectedIndex, Values);
+                    keyProperty.stringValue = Values[selectedIndex];
+                }
+                else
+                {
+                    EditorGUI.LabelField(position, label.text, "No Values");
+                    return;
+                }   
             }
             EditorGUI.EndProperty();
         }

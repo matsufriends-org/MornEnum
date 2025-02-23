@@ -3,8 +3,7 @@ using UnityEngine;
 
 namespace MornEnum
 {
-    [Serializable]
-    public abstract class MornEnumBase<T> where T : MornEnumGlobalBase<T>
+    public abstract class MornEnumBase
     {
         [SerializeField] private string _key;
         public string Key
@@ -12,7 +11,11 @@ namespace MornEnum
             get => _key;
             set => _key = value;
         }
-        public int Index => Global.Flags.IndexOf(_key);
-        protected abstract T Global { get; }
+        public int Index
+        {
+            get => Array.IndexOf(Values, _key);
+            set => _key = Values[value];
+        }
+        public abstract string[] Values { get; }
     }
 }
