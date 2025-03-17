@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace MornEnum
 {
+    [Serializable]
     public abstract class MornEnumBase
     {
         [SerializeField] private string _key;
