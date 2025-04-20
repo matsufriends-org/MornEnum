@@ -18,5 +18,17 @@ namespace MornEnum
             set => _key = Values[value];
         }
         protected abstract string[] Values { get; }
+        
+        public static bool operator ==(MornEnumBase a, MornEnumBase b)
+        {
+            if (a is null && b is null) return true;
+            if (a is null || b is null) return false;
+            return a._key == b._key;
+        }
+
+        public static bool operator !=(MornEnumBase a, MornEnumBase b)
+        {
+            return !(a == b);
+        }
     }
 }
