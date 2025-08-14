@@ -30,5 +30,10 @@ namespace MornEnum
         {
             return !(a == b);
         }
+        
+        public override string ToString()
+        {
+            return _key;
+        }
     }
 }
