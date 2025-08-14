@@ -22,15 +22,19 @@ namespace MornEnum
             {
                 var key = keyProperty.stringValue;
                 var selectedIndex = Array.IndexOf(Values, key);
-                if (selectedIndex < 0)
-                {
-                    selectedIndex = 0;
-                }
-
+                
                 if (Values.Length > 0)
                 {
-                    selectedIndex = EditorGUI.Popup(position, label.text, selectedIndex, Values);
-                    keyProperty.stringValue = Values[selectedIndex];
+                    if (selectedIndex < 0)
+                    {
+                        selectedIndex = 0;
+                        keyProperty.stringValue = Values[selectedIndex];
+                    }
+                    else
+                    {
+                        selectedIndex = EditorGUI.Popup(position, label.text, selectedIndex, Values);
+                        keyProperty.stringValue = Values[selectedIndex];
+                    }
                 }
                 else
                 {
@@ -39,6 +43,9 @@ namespace MornEnum
                 }   
             }
             EditorGUI.EndProperty();
+            
+            property.serializedObject.ApplyModifiedProperties();
+            property.serializedObject.Update();
         }
     }
 }
